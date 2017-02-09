@@ -17,7 +17,7 @@ public class Main {
                 while (true) {
                     try {
                         Thread.sleep(1000);
-                        System.out.println("Первый поток ");
+                        System.out.print("Первый поток ");
                         Chronometer.printTimeSinceStartSession();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -33,7 +33,23 @@ public class Main {
                 while (true) {
                     try {
                         Thread.sleep(5000);
-                        System.out.println("Второй поток ");
+                        System.out.print("Второй поток ");
+                        Chronometer.printTimeSinceStartSession();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        Thread myThr3 = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        Thread.sleep(7000);
+                        System.out.print("Третий поток ");
                         Chronometer.printTimeSinceStartSession();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -43,6 +59,6 @@ public class Main {
         });
             myThr1.start();
             myThr2.start();
-
+        myThr3.start();
     }
 }

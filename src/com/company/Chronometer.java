@@ -20,24 +20,24 @@ public class Chronometer {
         long timeSinceStartSession = System.currentTimeMillis() - pointOfStart;
         synchronized (lock) {
             try {
-                while (!ready) {
+                if (!ready) {
                     lock.wait();
                     timeSinceStartSession = System.currentTimeMillis() - pointOfStart;
+                    //lock.notify(); // ежесекундное оповещение
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
+            return timeSinceStartSession;
         }
-
-        return timeSinceStartSession;
     }
+
 
     public static void printTimeSinceStartSession() {
         synchronized (lock) {
             ready = true;
             System.out.println(getTimeSinceStartSession());
-            lock.notify();
+            lock.notifyAll();
         }
     }
 }
