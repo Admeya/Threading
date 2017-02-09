@@ -6,15 +6,38 @@ package com.company;
 public class Chronometer {
     private static long pointOfStart = System.currentTimeMillis();
     public static final Object lock = new Object();
+    public static boolean ready = false;
+
+    public static long getPointOfStart() {
+        return pointOfStart;
+    }
+
+    public static void setPointOfStart(long pointOfStart) {
+        Chronometer.pointOfStart = pointOfStart;
+    }
 
     public static long getTimeSinceStartSession() {
-        long timeSinceStartSession;
+        long timeSinceStartSession = System.currentTimeMillis() - pointOfStart;
         synchronized (lock) {
-            timeSinceStartSession = System.currentTimeMillis() - pointOfStart;
+            try {
+                while (!ready) {
+                    lock.wait();
+                    timeSinceStartSession = System.currentTimeMillis() - pointOfStart;
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         }
 
         return timeSinceStartSession;
     }
 
-    public static long 
+    public static void printTimeSinceStartSession() {
+        synchronized (lock) {
+            ready = true;
+            System.out.println(getTimeSinceStartSession());
+            lock.notify();
+        }
+    }
 }

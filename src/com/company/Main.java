@@ -6,25 +6,22 @@ package com.company;
 //2.Не внося изменений в код потока-"хронометра",добавьте еще один поток,который выводит на экран другое сообщение
 // каждые 7 секунд.Предполагается использование методов wait(),notifyAll().
 
-import java.io.IOException;
-import java.util.Date;
-
 public class Main {
-
-
-
     public static void main(String[] args) {
-        long startMs = 1000;
+        Chronometer.setPointOfStart(System.currentTimeMillis());
 
         Thread myThr1 = new Thread(new Runnable() {
 
             @Override
             public void run() {
-                try {
-                    Thread.sleep(startMs);
-                    System.out.println("Первый поток " + (Chronometer.getTimeSinceStartSession() + startMs));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                while (true) {
+                    try {
+                        Thread.sleep(1000);
+                        System.out.println("Первый поток ");
+                        Chronometer.printTimeSinceStartSession();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
            }
         });
@@ -33,18 +30,19 @@ public class Main {
 
             @Override
             public void run() {
-                try {
-                    Thread.sleep(5000);
-                    System.out.println("Второй поток " + (Chronometer.getTimeSinceStartSession() + startMs));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                while (true) {
+                    try {
+                        Thread.sleep(5000);
+                        System.out.println("Второй поток ");
+                        Chronometer.printTimeSinceStartSession();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
-
-        while(true) {
             myThr1.start();
             myThr2.start();
-        }
+
     }
 }
